@@ -34,15 +34,16 @@ def run_discord_bot():
     async def on_message(message : discord.message.Message):
         if isinstance(message.channel, discord.DMChannel) and message.attachments:
             for attachment in message.attachments:
+                print(type(attachment))
                 if any(attachment.filename.lower().endswith(ext) for ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp']):
                     file_path = os.path.join('images/user_images', attachment.filename)
                     async with aiohttp.ClientSession() as session:
                         async with session.get(attachment.url) as response:
                             if response.status == 200:
-                                with open(file_path, 'wb') as file:
-                                    file.write(await response.read())
                                 if (attachment.filename.lower().startswith('img') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('pxl') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('rn_image') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('win') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('photo') and attachment.filename.lower().endswith('.jpg')):
                                     await message.channel.send(f'Image saved as {attachment.filename}. It appears this image may have been taken with Discord\'s camera.')
+                                    with open(file_path, 'wb') as file:
+                                        file.write(await response.read())
                                 else:
                                     await message.channel.send('Failed to download image.')
                             else:
