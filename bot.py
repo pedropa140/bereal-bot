@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import os
 
 from dotenv import load_dotenv
+import response
 load_dotenv()
 
 def run_discord_bot():
@@ -34,7 +35,6 @@ def run_discord_bot():
     async def on_message(message : discord.message.Message):
         if isinstance(message.channel, discord.DMChannel) and message.attachments:
             for attachment in message.attachments:
-                print(type(attachment))
                 if any(attachment.filename.lower().endswith(ext) for ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp']):
                     file_path = os.path.join('images/user_images', attachment.filename)
                     async with aiohttp.ClientSession() as session:
@@ -50,9 +50,16 @@ def run_discord_bot():
                                 await message.channel.send('Failed to download image.')
                     
     
-    # @bot.tree.command(name = "adduser", description = "Adds user to the BeReal-Bot")
-    # @app_commands.describe(username = "Username", firstname = 'First Name', lastname = 'Last Name')
-    # async def adduser(interaction : discord.Interaction, username : str, firstname : str, lastname : str):
-    #     return NotImplementedError
+    @bot.tree.command(name = "adduser", description = "Adds user to the BeReal-Bot")
+    @app_commands.describe(username = "Username", firstname = 'First Name', lastname = 'Last Name')
+    async def adduser(interaction : discord.Interaction, username : str, firstname : str, lastname : str):
+        username = str(interaction.user)
+        mention = str(interaction.user.mention)
+        user_message = str(interaction.command.name)
+        channel = str(interaction.channel)
+        
+        print(f'{username} ({mention}) said: "{user_message}" ({channel})')
+
+        await response.add_user(interaction, username, firstname, lastname)
 
     bot.run(TOKEN)
