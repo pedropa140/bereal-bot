@@ -7,6 +7,7 @@ import os
 
 from dotenv import load_dotenv
 import response
+from user import User, UserDatabase
 load_dotenv()
 
 def run_discord_bot():
@@ -19,14 +20,15 @@ def run_discord_bot():
     intents.message_content = True
     intents.dm_messages = True
     bot = commands.Bot(command_prefix="!", intents=intents)
+    userdatabase = UserDatabase('users_database.db')
 
     @bot.event
     async def on_ready():
-        print(f'{bot.user} is now running!')
         try:
             synced = await bot.tree.sync()
             print(f'Synced {synced} command(s)')
-            print(f'Synced {len(synced)} command(s)')
+            print(f'Synced {len(synced)} command(s)')            
+            print(f'{bot.user} is now running!')
             # bot.loop.create_task()
         except Exception as e:
             print(e)
@@ -51,8 +53,8 @@ def run_discord_bot():
                     
     
     @bot.tree.command(name = "adduser", description = "Adds user to the BeReal-Bot")
-    @app_commands.describe(username = "Username", firstname = 'First Name', lastname = 'Last Name')
-    async def adduser(interaction : discord.Interaction, username : str, firstname : str, lastname : str):
+    @app_commands.describe(firstname = 'First Name', lastname = 'Last Name')
+    async def adduser(interaction : discord.Interaction, firstname : str, lastname : str):
         username = str(interaction.user)
         mention = str(interaction.user.mention)
         user_message = str(interaction.command.name)
@@ -60,6 +62,6 @@ def run_discord_bot():
         
         print(f'{username} ({mention}) said: "{user_message}" ({channel})')
 
-        await response.add_user(interaction, username, firstname, lastname)
+        await response.add_user(interaction, firstname, lastname, userdatabase)
 
     bot.run(TOKEN)

@@ -2,3 +2,5 @@
 __pycache__/
 gitpush.py
 images/user_images/*
+user_info/*
+*.db
