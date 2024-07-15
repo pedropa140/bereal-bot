@@ -62,6 +62,17 @@ def run_discord_bot():
         
         print(f'{username} ({mention}) said: "{user_message}" ({channel})')
 
-        await response.add_user(interaction, firstname, lastname, userdatabase)
+        await response.add_user(bot, interaction, firstname, lastname, userdatabase)
+
+    @bot.tree.command(name = "removeuser", description = "Removes a user from BeReal-Bot")
+    async def removeuser(interaction : discord.Interaction):
+        username = str(interaction.user)
+        mention = str(interaction.user.mention)
+        user_message = str(interaction.command.name)
+        channel = str(interaction.channel)
+        
+        print(f'{username} ({mention}) said: "{user_message}" ({channel})')
+
+        await response.remove_user(bot, interaction, userdatabase)
 
     bot.run(TOKEN)
