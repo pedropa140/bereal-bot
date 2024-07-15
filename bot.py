@@ -5,9 +5,11 @@ import aiohttp
 from dotenv import load_dotenv
 import os
 
+import json
 from dotenv import load_dotenv
 import response
 from user import User, UserDatabase
+import datetime
 load_dotenv()
 
 def run_discord_bot():
@@ -38,14 +40,28 @@ def run_discord_bot():
         if isinstance(message.channel, discord.DMChannel) and message.attachments:
             for attachment in message.attachments:
                 if any(attachment.filename.lower().endswith(ext) for ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp']):
-                    file_path = os.path.join('images/user_images', attachment.filename)
                     async with aiohttp.ClientSession() as session:
                         async with session.get(attachment.url) as response:
                             if response.status == 200:
+                                contents = None
+                                with open(f'user_info/{message.author.id}_bereal.JSON', 'r') as file:
+                                    contents = json.load(file)
+                                if attachment.filename in contents['filenames']:
+                                    await message.channel.send(f'File already uploaded to {bot.user}')
+                                    break
                                 if (attachment.filename.lower().startswith('img') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('pxl') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('rn_image') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('win') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('photo') and attachment.filename.lower().endswith('.jpg')):
-                                    await message.channel.send(f'Image saved as {attachment.filename}. It appears this image may have been taken with Discord\'s camera.')
-                                    with open(file_path, 'wb') as file:
+                                    with open(f'user_info/{message.author.id}_bereal.JSON', 'w') as file:
+                                        contents['filenames'].append(attachment.filename)
+                                        json.dump(contents, file, indent=4)
+                                        await message.channel.send(f'Image saved as {attachment.filename}.')
+                                    current_time = datetime.datetime.now()
+                                    current_time = current_time.strftime("%m%d%YT%H%M%S")
+                                    with open(f'images/user_images/{message.author.name}_{current_time}.jpg', 'wb') as file:
                                         file.write(await response.read())
+                                    # for guild in bot.guilds:
+                                    #     for channel in guild.channels:
+                                    #         if channel.name == 'bereal-bot' and channel.type == 'fourm':
+
                                 else:
                                     await message.channel.send('Failed to download image.')
                             else:
