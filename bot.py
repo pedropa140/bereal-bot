@@ -38,6 +38,7 @@ def run_discord_bot():
     @bot.event
     async def on_message(message : discord.message.Message):
         if isinstance(message.channel, discord.DMChannel) and message.attachments:
+            filename = ""
             for attachment in message.attachments:
                 if any(attachment.filename.lower().endswith(ext) for ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp']):
                     async with aiohttp.ClientSession() as session:
@@ -55,17 +56,33 @@ def run_discord_bot():
                                         json.dump(contents, file, indent=4)
                                         await message.channel.send(f'Image saved as {attachment.filename}.')
                                     current_time = datetime.datetime.now()
-                                    current_time = current_time.strftime("%m%d%YT%H%M%S")
-                                    with open(f'images/user_images/{message.author.name}_{current_time}.jpg', 'wb') as file:
+                                    formatted_time = current_time.strftime("%m%d%YT%H%M%S")
+                                    filename = f'images/user_images/{message.author.name}_{formatted_time}.jpg'
+                                    with open(filename, 'wb') as file:
                                         file.write(await response.read())
-                                    # for guild in bot.guilds:
-                                    #     for channel in guild.channels:
-                                    #         if channel.name == 'bereal-bot' and channel.type == 'fourm':
-
+                                    for guild in bot.guilds:
+                                        for channel in guild.channels:
+                                            if str(channel.name) == 'bereal-bot' and isinstance(channel, discord.ForumChannel):
+                                                result_title = f'**{message.author.name} has posted!**'
+                                                result_description = f"Posted at {current_time.strftime("%H:%M:%S")}"
+                                                embed = discord.Embed(title=result_title, description=result_description, color=8311585)
+                                                file = discord.File(f'images/user_images/{message.author.name}_{formatted_time}.jpg', filename=f'{message.author.name}_{formatted_time}.jpg')
+                                                embed.set_image(url=f'attachment://{message.author.name}_{formatted_time}.jpg')
+                                                embed.set_author(name="bereal-Bot says:")
+                                                embed.set_footer(text="/bereal")
+                                                
+                                                discussion_post = await channel.create_thread(
+                                                    name=f"{current_time.strftime("%m/%d/%Y")}: {message.author.name} has posted!",
+                                                    content="",
+                                                    embed=embed,
+                                                    file=file
+                                                )
+                                                break
                                 else:
                                     await message.channel.send('Failed to download image.')
                             else:
                                 await message.channel.send('Failed to download image.')
+            os.remove(filename)
                     
     
     @bot.tree.command(name = "adduser", description = "Adds user to the BeReal-Bot")
