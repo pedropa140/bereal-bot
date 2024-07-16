@@ -248,6 +248,10 @@ def run_discord_bot():
         print(f'{username} ({mention}) said: "{user_message}" ({channel})')
 
         await response.add_user(interaction, firstname, lastname, userdatabase)
+        global user_dict
+        for user in userdatabase.get_all_user_ids():
+            if user not in user_dict:
+                user_dict[user] = False
 
     @bot.tree.command(name = "removeuser", description = "Removes a user from BeReal-Bot")
     async def removeuser(interaction : discord.Interaction):
