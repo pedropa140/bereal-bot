@@ -150,13 +150,13 @@ def run_discord_bot():
                                             await message.channel.send(file=file, embed=embed)
                                         current_time = datetime.datetime.now()
                                         formatted_time = current_time.strftime("%m%d%YT%H%M%S")
-                                        filename = f'images/user_images/{message.author.name}_{formatted_time}.jpg'
+                                        filename = f'images/user_images/{message.author.id}_{formatted_time}.jpg'
                                         with open(filename, 'wb') as file:
                                             file.write(await response.read())
                                         for guild in bot.guilds:
                                             for channel in guild.channels:
                                                 if str(channel.name) == 'bereal-bot' and isinstance(channel, discord.ForumChannel):
-                                                    result_title = f'**{message.author.name} has posted!**'                                                    
+                                                    result_title = f'**{message.author.id} has posted!**'                                                    
                                                     result_description = f"Posted at {current_time.strftime("%H:%M:%S")}"
                                                     time_to_add = datetime.timedelta(minutes=3)
                                                     time_difference = current_time - (random_datetime + time_to_add)
@@ -175,13 +175,13 @@ def run_discord_bot():
                                                             result_description += f' ({seconds} {second_label} late)'
 
                                                     embed = discord.Embed(title=result_title, description=result_description, color=8311585)
-                                                    file = discord.File(f'images/user_images/{message.author.name}_{formatted_time}.jpg', filename=f'{message.author.name}_{formatted_time}.jpg')
-                                                    embed.set_image(url=f'attachment://{message.author.name}_{formatted_time}.jpg')
+                                                    file = discord.File(f'images/user_images/{message.author.id}_{formatted_time}.jpg', filename=f'{message.author.id}_{formatted_time}.jpg')
+                                                    embed.set_image(url=f'attachment://{message.author.id}_{formatted_time}.jpg')
                                                     embed.set_author(name="bereal-Bot says:")
                                                     embed.set_footer(text="/bereal")
                                                     
                                                     discussion_post = await channel.create_thread(
-                                                        name=f"{current_time.strftime("%m/%d/%Y")}: {message.author.name} has posted!",
+                                                        name=f"{current_time.strftime("%m/%d/%Y")}: {message.author.id} has posted!",
                                                         content="",
                                                         embed=embed,
                                                         file=file
@@ -247,7 +247,7 @@ def run_discord_bot():
         
         print(f'{username} ({mention}) said: "{user_message}" ({channel})')
 
-        await response.add_user(bot, interaction, firstname, lastname, userdatabase)
+        await response.add_user(interaction, firstname, lastname, userdatabase)
 
     @bot.tree.command(name = "removeuser", description = "Removes a user from BeReal-Bot")
     async def removeuser(interaction : discord.Interaction):
@@ -258,6 +258,6 @@ def run_discord_bot():
         
         print(f'{username} ({mention}) said: "{user_message}" ({channel})')
 
-        await response.remove_user(bot, interaction, userdatabase)
+        await response.remove_user(interaction, userdatabase)
 
     bot.run(TOKEN)

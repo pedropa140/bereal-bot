@@ -22,7 +22,7 @@ async def add_user(interaction : discord.Interaction, firstname : str, lastname 
         await interaction.response.send_message(file=file, embed=embed, ephemeral=True)
     else:
         result_title = f'**ERROR**'
-        result_description = f'USER **{interaction.user.name}** DOES NOT EXIST IN DATABASE'
+        result_description = f'USER **{interaction.user.name}** ALREADY EXISTS IN DATABASE'
         embed = discord.Embed(title=result_title, description=result_description, color=13632027)
         file = discord.File('images/icon.png', filename='icon.png')
         embed.set_image(url='attachment://icon.png')
