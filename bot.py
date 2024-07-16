@@ -70,8 +70,30 @@ def run_discord_bot():
                 random_time = datetime.strptime(random_string, '%H:%M').time()
                 random_datetime = datetime.combine(current_date, random_time)
 
-            # if current_datetime == random_string:
-            if current_date == current_datetime:
+            if current_datetime == random_string:
+                for guild in bot.guilds:
+                    for channel in guild.channels:
+                        if channel.name == 'bereal-bot' and str(channel.type) == 'forum':
+                            for thread in channel.threads:
+                                await thread.delete()
+
+                    for user in user_dict:
+                        bereal_id = 0
+                        guild = bot.get_guild(int(guild.id))
+                        if guild:
+                            for role in guild.roles:
+                                if role.name == 'bereal-user':
+                                    bereal_id = role.id
+                                    break
+
+                        role = guild.get_role(int(bereal_id))
+                        if role:
+                            member = guild.get_member(user)
+                            if member is None:
+                                member = await guild.fetch_member(user)
+                            if member:
+                                await member.remove_roles(role)
+
                 for user in user_dict:
                     user_dict[user] = False
                 result_title = f'**BeReal Time!**'
@@ -166,6 +188,22 @@ def run_discord_bot():
                                                     )
                                                     break
                                         user_dict[message.author.id] = True
+                                        for guild in bot.guilds:
+                                            bereal_id = 0
+                                            guild = bot.get_guild(int(guild.id))
+                                            if guild:
+                                                for role in guild.roles:
+                                                    if role.name == 'bereal-user':
+                                                        bereal_id = role.id
+                                                        break
+
+                                            role = guild.get_role(int(bereal_id))
+                                            if role:
+                                                member = guild.get_member(message.author.id)
+                                                if member is None:
+                                                    member = await guild.fetch_member(message.author.id)
+                                                if member:
+                                                    await member.add_roles(role)
                                     else:
                                         result_title = f'**ERROR**'
                                         result_description = 'Incorrect file format.'

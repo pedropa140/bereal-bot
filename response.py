@@ -7,7 +7,7 @@ import os
 
 from user import User, UserDatabase
 
-async def add_user(bot : commands.Bot, interaction : discord.Interaction, firstname : str, lastname : str, userdatabase : UserDatabase):
+async def add_user(interaction : discord.Interaction, firstname : str, lastname : str, userdatabase : UserDatabase):
     if not userdatabase.user_id_exists(interaction.user.id):
         new_user = User(interaction.user.name, int(interaction.user.id), firstname, lastname)
         new_user.to_json()
@@ -20,22 +20,6 @@ async def add_user(bot : commands.Bot, interaction : discord.Interaction, firstn
         embed.set_author(name="bereal-Bot says:")
         embed.set_footer(text="/adduser")
         await interaction.response.send_message(file=file, embed=embed, ephemeral=True)
-        for guild in bot.guilds:
-            bereal_id = 0
-            guild = bot.get_guild(int(guild.id))
-            if guild:
-                for role in guild.roles:
-                    if role.name == 'bereal-user':
-                        bereal_id = role.id
-                        break
-
-            role = guild.get_role(int(bereal_id))
-            if role:
-                member = guild.get_member(interaction.user.id)
-                if member is None:
-                    member = await guild.fetch_member(interaction.user.id)
-                if member:
-                    await member.add_roles(role)
     else:
         result_title = f'**ERROR**'
         result_description = f'USER **{interaction.user.name}** DOES NOT EXIST IN DATABASE'
@@ -46,7 +30,7 @@ async def add_user(bot : commands.Bot, interaction : discord.Interaction, firstn
         embed.set_footer(text="/adduser")
         await interaction.response.send_message(file=file, embed=embed, ephemeral=True)
 
-async def remove_user(bot : commands.Bot, interaction : discord.Interaction, userdatabase : UserDatabase):
+async def remove_user(interaction : discord.Interaction, userdatabase : UserDatabase):
     if not userdatabase.user_id_exists(interaction.user.id):
         result_title = f'**ERROR**'
         result_description = f'USER **{interaction.user.name}** DOES NOT EXIST IN DATABASE'
@@ -68,19 +52,3 @@ async def remove_user(bot : commands.Bot, interaction : discord.Interaction, use
         embed.set_author(name="bereal-Bot says:")
         embed.set_footer(text="/removeuser")
         await interaction.response.send_message(file=file, embed=embed, ephemeral=True)
-        for guild in bot.guilds:
-            bereal_id = 0
-            guild = bot.get_guild(int(guild.id))
-            if guild:
-                for role in guild.roles:
-                    if role.name == 'bereal-user':
-                        bereal_id = role.id
-                        break
-
-            role = guild.get_role(int(bereal_id))
-            if role:
-                member = guild.get_member(interaction.user.id)
-                if member is None:
-                    member = await guild.fetch_member(interaction.user.id)
-                if member:
-                    await member.remove_roles(role)
