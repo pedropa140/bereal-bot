@@ -181,7 +181,7 @@ def run_discord_bot():
                                                     embed.set_footer(text="/bereal")
                                                     
                                                     discussion_post = await channel.create_thread(
-                                                        name=f"{current_time.strftime("%m/%d/%Y")}: {message.author.id} has posted!",
+                                                        name=f"{current_time.strftime("%m/%d/%Y")}: {message.author.name} has posted!",
                                                         content="",
                                                         embed=embed,
                                                         file=file
