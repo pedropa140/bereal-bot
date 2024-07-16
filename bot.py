@@ -234,8 +234,7 @@ def run_discord_bot():
             try:
                 os.remove(filename)
             except Exception as e:
-                pass
-                    
+                pass                    
     
     @bot.tree.command(name = "adduser", description = "Adds user to the BeReal-Bot")
     @app_commands.describe(firstname = 'First Name', lastname = 'Last Name')
