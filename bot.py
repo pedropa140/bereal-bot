@@ -6,10 +6,13 @@ from dotenv import load_dotenv
 import os
 
 import json
+import random
+import asyncio
 from dotenv import load_dotenv
 import response
 from user import User, UserDatabase
 import datetime
+import time
 load_dotenv()
 
 def run_discord_bot():
@@ -23,7 +26,7 @@ def run_discord_bot():
     intents.dm_messages = True
     bot = commands.Bot(command_prefix="!", intents=intents)
     userdatabase = UserDatabase('users_database.db')
-
+    user_dict = {}
     @bot.event
     async def on_ready():
         try:
@@ -31,13 +34,54 @@ def run_discord_bot():
             print(f'Synced {synced} command(s)')
             print(f'Synced {len(synced)} command(s)')            
             print(f'{bot.user} is now running!')
-            # bot.loop.create_task()
+            bot.loop.create_task(ping_at_specific_time(bot))
         except Exception as e:
             print(e)
 
+    async def ping_at_specific_time(bot : commands.Bot):
+        global user_dict
+        user_dict = {}
+        for user in userdatabase.get_all_user_ids():
+            if user not in user_dict:
+                user_dict[user] = False
+
+        random_hour = random.randint(11, 20)
+        random_minute = random.randint(0, 59)
+        random_string = f'{random_hour}:{random_minute}'
+        while True:
+            for user in userdatabase.get_all_user_ids():
+                if user not in user_dict:
+                    user_dict[user] = False
+            datetime_variable = datetime.datetime.now()
+            current_datetime = datetime_variable.strftime("%H:%M")
+            if current_datetime == '10:00':
+                random_hour = random.randint(11, 20)
+                random_minute = random.randint(0, 59)
+
+                random_string = f'{random_hour}:{random_minute}'
+
+            if current_datetime == random_string:
+                for user in user_dict:
+                    user_dict[user] = False
+                result_title = f'**BeReal Time!**'
+                result_description = f"You have ***3*** Minutes to post your BeReal!"
+                embed = discord.Embed(title=result_title, description=result_description, color=8311585)
+                embed.set_image(url=f'attachment://icon.png')
+                embed.set_author(name="bereal-Bot says:")
+                embed.set_footer(text="/bereal")
+
+                for user in user_dict:
+                    send_message = await bot.fetch_user(user)
+                    with open('images/icon.png', 'rb') as f:
+                        file = discord.File(f, filename='icon.png')
+                        await send_message.send(file=file, embed=embed)
+
+            await asyncio.sleep(60)
     @bot.event
     async def on_message(message : discord.message.Message):
+        global user_dict
         if isinstance(message.channel, discord.DMChannel) and message.attachments:
+            print(user_dict)
             filename = ""
             for attachment in message.attachments:
                 if any(attachment.filename.lower().endswith(ext) for ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp']):
@@ -50,7 +94,7 @@ def run_discord_bot():
                                 if attachment.filename in contents['filenames']:
                                     await message.channel.send(f'File already uploaded to {bot.user}')
                                     break
-                                if (attachment.filename.lower().startswith('img') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('pxl') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('rn_image') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('win') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('photo') and attachment.filename.lower().endswith('.jpg')):
+                                if ((attachment.filename.lower().startswith('img') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('pxl') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('rn_image') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('win') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('photo') and attachment.filename.lower().endswith('.jpg'))) and user_dict[message.author.id] != True:
                                     with open(f'user_info/{message.author.id}_bereal.JSON', 'w') as file:
                                         contents['filenames'].append(attachment.filename)
                                         json.dump(contents, file, indent=4)
@@ -78,11 +122,15 @@ def run_discord_bot():
                                                     file=file
                                                 )
                                                 break
+                                    user_dict[message.author.id] = True
                                 else:
                                     await message.channel.send('Failed to download image.')
                             else:
                                 await message.channel.send('Failed to download image.')
-            os.remove(filename)
+            try:
+                os.remove(filename)
+            except Exception as e:
+                pass
                     
     
     @bot.tree.command(name = "adduser", description = "Adds user to the BeReal-Bot")
