@@ -7,7 +7,22 @@
 <h1>BeReal-Bot</h1>
 
 ## Description
-BeReal-Bot
+Welcome to BeReal-Bot! 👋 This bot is designed to capture authentic moments, just like the BeReal app. Every day, at a random time, you’ll be prompted to share a photo that showcases your true self—no filters, no edits! 📸✨
+
+## How It Works
+
+1. **Random Moment:**  
+   You’ll receive a notification at a surprise time.
+
+2. **Snap a Pic:**  
+   You’ll have 2 minutes to take a photo of what you’re doing right at that moment. It’s all about being real!
+
+3. **Share & Connect:**  
+   After you snap your pic, you can share them with friends and see their moments too. Let’s keep it genuine!
+
+## Remember
+It’s not about the likes; it’s about capturing life as it is. So get ready to embrace the spontaneity! 🎉
+Feel free to modify any sections as needed!
 </div>
 
 
