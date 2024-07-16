@@ -28,6 +28,7 @@ def run_discord_bot():
     userdatabase = UserDatabase('users_database.db')
     user_dict = {}
     random_datetime = None
+
     @bot.event
     async def on_ready():
         try:
@@ -69,7 +70,8 @@ def run_discord_bot():
                 random_time = datetime.strptime(random_string, '%H:%M').time()
                 random_datetime = datetime.combine(current_date, random_time)
 
-            if current_datetime == random_string:
+            # if current_datetime == random_string:
+            if current_date == current_datetime:
                 for user in user_dict:
                     user_dict[user] = False
                 result_title = f'**BeReal Time!**'
@@ -102,14 +104,28 @@ def run_discord_bot():
                                 with open(f'user_info/{message.author.id}_bereal.JSON', 'r') as file:
                                     contents = json.load(file)
                                 if attachment.filename in contents['filenames']:
-                                    await message.channel.send(f'File already uploaded to {bot.user}')
+                                    result_title = f'**ERROR**'
+                                    result_description = f'File {attachment.filename} already uploaded to {bot.user}'
+                                    embed = discord.Embed(title=result_title, description=result_description, color=13632027)
+                                    file = discord.File('images/icon.png', filename='icon.png')
+                                    embed.set_image(url='attachment://icon.png')
+                                    embed.set_author(name="bereal-Bot says:")
+                                    embed.set_footer(text="/removeuser")
+                                    await message.channel.send(file=file, embed=embed)
                                     break
                                 if user_dict[message.author.id] != True:
                                     if ((attachment.filename.lower().startswith('img') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('pxl') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('rn_image') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('win') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('photo') and attachment.filename.lower().endswith('.jpg'))):
                                         with open(f'user_info/{message.author.id}_bereal.JSON', 'w') as file:
                                             contents['filenames'].append(attachment.filename)
                                             json.dump(contents, file, indent=4)
-                                            await message.channel.send(f'Image saved as {attachment.filename}.') # Success Message
+                                            result_title = f'**Image Uploaded**'
+                                            result_description = f'Image saved as {attachment.filename}.'
+                                            embed = discord.Embed(title=result_title, description=result_description, color=8311585)
+                                            file = discord.File('images/icon.png', filename='icon.png')
+                                            embed.set_image(url='attachment://icon.png')
+                                            embed.set_author(name="bereal-Bot says:")
+                                            embed.set_footer(text="/removeuser")
+                                            await message.channel.send(file=file, embed=embed)
                                         current_time = datetime.datetime.now()
                                         formatted_time = current_time.strftime("%m%d%YT%H%M%S")
                                         filename = f'images/user_images/{message.author.name}_{formatted_time}.jpg'
@@ -151,11 +167,32 @@ def run_discord_bot():
                                                     break
                                         user_dict[message.author.id] = True
                                     else:
-                                        await message.channel.send('Incorrect file format.')
+                                        result_title = f'**ERROR**'
+                                        result_description = 'Incorrect file format.'
+                                        embed = discord.Embed(title=result_title, description=result_description, color=13632027)
+                                        file = discord.File('images/icon.png', filename='icon.png')
+                                        embed.set_image(url='attachment://icon.png')
+                                        embed.set_author(name="bereal-Bot says:")
+                                        embed.set_footer(text="/removeuser")
+                                        await message.channel.send(file=file, embed=embed)
                                 else:
-                                    await message.channel.send('You have already posted a BeReal.')
+                                    result_title = f'**ERROR**'
+                                    result_description = 'You have already posted a BeReal.'
+                                    embed = discord.Embed(title=result_title, description=result_description, color=13632027)
+                                    file = discord.File('images/icon.png', filename='icon.png')
+                                    embed.set_image(url='attachment://icon.png')
+                                    embed.set_author(name="bereal-Bot says:")
+                                    embed.set_footer(text="/removeuser")
+                                    await message.channel.send(file=file, embed=embed)
                             else:
-                                await message.channel.send('Failed to download image.')
+                                result_title = f'**ERROR**'
+                                result_description = 'Failed to download image.'
+                                embed = discord.Embed(title=result_title, description=result_description, color=13632027)
+                                file = discord.File('images/icon.png', filename='icon.png')
+                                embed.set_image(url='attachment://icon.png')
+                                embed.set_author(name="bereal-Bot says:")
+                                embed.set_footer(text="/removeuser")
+                                await message.channel.send(file=file, embed=embed)
             try:
                 os.remove(filename)
             except Exception as e:
