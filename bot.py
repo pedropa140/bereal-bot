@@ -27,6 +27,7 @@ def run_discord_bot():
     bot = commands.Bot(command_prefix="!", intents=intents)
     userdatabase = UserDatabase('users_database.db')
     user_dict = {}
+    random_datetime = None
     @bot.event
     async def on_ready():
         try:
@@ -39,7 +40,8 @@ def run_discord_bot():
             print(e)
 
     async def ping_at_specific_time(bot : commands.Bot):
-        global user_dict
+        global user_dict        
+        global random_datetime
         user_dict = {}
         for user in userdatabase.get_all_user_ids():
             if user not in user_dict:
@@ -48,6 +50,10 @@ def run_discord_bot():
         random_hour = random.randint(11, 20)
         random_minute = random.randint(0, 59)
         random_string = f'{random_hour}:{random_minute}'
+        random_string = f'{random_hour:02d}:{random_minute:02d}'
+        current_date = datetime.datetime.now().date()
+        random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
+        random_datetime = datetime.datetime.combine(current_date, random_time)
         while True:
             for user in userdatabase.get_all_user_ids():
                 if user not in user_dict:
@@ -57,8 +63,11 @@ def run_discord_bot():
             if current_datetime == '10:00':
                 random_hour = random.randint(11, 20)
                 random_minute = random.randint(0, 59)
-
                 random_string = f'{random_hour}:{random_minute}'
+                random_string = f'{random_hour:02d}:{random_minute:02d}'
+                current_date = datetime.now().date()
+                random_time = datetime.strptime(random_string, '%H:%M').time()
+                random_datetime = datetime.combine(current_date, random_time)
 
             if current_datetime == random_string:
                 for user in user_dict:
@@ -77,11 +86,12 @@ def run_discord_bot():
                         await send_message.send(file=file, embed=embed)
 
             await asyncio.sleep(60)
+
     @bot.event
     async def on_message(message : discord.message.Message):
         global user_dict
+        global random_datetime
         if isinstance(message.channel, discord.DMChannel) and message.attachments:
-            print(user_dict)
             filename = ""
             for attachment in message.attachments:
                 if any(attachment.filename.lower().endswith(ext) for ext in ['jpg', 'jpeg', 'png', 'gif', 'bmp']):
@@ -94,37 +104,56 @@ def run_discord_bot():
                                 if attachment.filename in contents['filenames']:
                                     await message.channel.send(f'File already uploaded to {bot.user}')
                                     break
-                                if ((attachment.filename.lower().startswith('img') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('pxl') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('rn_image') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('win') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('photo') and attachment.filename.lower().endswith('.jpg'))) and user_dict[message.author.id] != True:
-                                    with open(f'user_info/{message.author.id}_bereal.JSON', 'w') as file:
-                                        contents['filenames'].append(attachment.filename)
-                                        json.dump(contents, file, indent=4)
-                                        await message.channel.send(f'Image saved as {attachment.filename}.')
-                                    current_time = datetime.datetime.now()
-                                    formatted_time = current_time.strftime("%m%d%YT%H%M%S")
-                                    filename = f'images/user_images/{message.author.name}_{formatted_time}.jpg'
-                                    with open(filename, 'wb') as file:
-                                        file.write(await response.read())
-                                    for guild in bot.guilds:
-                                        for channel in guild.channels:
-                                            if str(channel.name) == 'bereal-bot' and isinstance(channel, discord.ForumChannel):
-                                                result_title = f'**{message.author.name} has posted!**'
-                                                result_description = f"Posted at {current_time.strftime("%H:%M:%S")}"
-                                                embed = discord.Embed(title=result_title, description=result_description, color=8311585)
-                                                file = discord.File(f'images/user_images/{message.author.name}_{formatted_time}.jpg', filename=f'{message.author.name}_{formatted_time}.jpg')
-                                                embed.set_image(url=f'attachment://{message.author.name}_{formatted_time}.jpg')
-                                                embed.set_author(name="bereal-Bot says:")
-                                                embed.set_footer(text="/bereal")
-                                                
-                                                discussion_post = await channel.create_thread(
-                                                    name=f"{current_time.strftime("%m/%d/%Y")}: {message.author.name} has posted!",
-                                                    content="",
-                                                    embed=embed,
-                                                    file=file
-                                                )
-                                                break
-                                    user_dict[message.author.id] = True
+                                if user_dict[message.author.id] != True:
+                                    if ((attachment.filename.lower().startswith('img') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('pxl') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('rn_image') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('win') and attachment.filename.lower().endswith('.jpg')) or (attachment.filename.lower().startswith('photo') and attachment.filename.lower().endswith('.jpg'))):
+                                        with open(f'user_info/{message.author.id}_bereal.JSON', 'w') as file:
+                                            contents['filenames'].append(attachment.filename)
+                                            json.dump(contents, file, indent=4)
+                                            await message.channel.send(f'Image saved as {attachment.filename}.') # Success Message
+                                        current_time = datetime.datetime.now()
+                                        formatted_time = current_time.strftime("%m%d%YT%H%M%S")
+                                        filename = f'images/user_images/{message.author.name}_{formatted_time}.jpg'
+                                        with open(filename, 'wb') as file:
+                                            file.write(await response.read())
+                                        for guild in bot.guilds:
+                                            for channel in guild.channels:
+                                                if str(channel.name) == 'bereal-bot' and isinstance(channel, discord.ForumChannel):
+                                                    result_title = f'**{message.author.name} has posted!**'                                                    
+                                                    result_description = f"Posted at {current_time.strftime("%H:%M:%S")}"
+                                                    time_to_add = datetime.timedelta(minutes=3)
+                                                    time_difference = current_time - (random_datetime + time_to_add)
+                                                    if time_difference.total_seconds() > 0:
+                                                        if time_difference.total_seconds() >= 3600:
+                                                            hours = int(time_difference.total_seconds() / 3600)
+                                                            hour_label = "hour" if hours == 1 else "hours"
+                                                            result_description += f' ({hours} {hour_label} late)'
+                                                        elif time_difference.total_seconds() >= 60:
+                                                            minutes = int(time_difference.total_seconds() / 60)
+                                                            minute_label = "minute" if minutes == 1 else "minutes"
+                                                            result_description += f' ({minutes} {minute_label} late)'
+                                                        else:
+                                                            seconds = int(time_difference.total_seconds())
+                                                            second_label = "second" if seconds == 1 else "seconds"
+                                                            result_description += f' ({seconds} {second_label} late)'
+
+                                                    embed = discord.Embed(title=result_title, description=result_description, color=8311585)
+                                                    file = discord.File(f'images/user_images/{message.author.name}_{formatted_time}.jpg', filename=f'{message.author.name}_{formatted_time}.jpg')
+                                                    embed.set_image(url=f'attachment://{message.author.name}_{formatted_time}.jpg')
+                                                    embed.set_author(name="bereal-Bot says:")
+                                                    embed.set_footer(text="/bereal")
+                                                    
+                                                    discussion_post = await channel.create_thread(
+                                                        name=f"{current_time.strftime("%m/%d/%Y")}: {message.author.name} has posted!",
+                                                        content="",
+                                                        embed=embed,
+                                                        file=file
+                                                    )
+                                                    break
+                                        user_dict[message.author.id] = True
+                                    else:
+                                        await message.channel.send('Incorrect file format.')
                                 else:
-                                    await message.channel.send('Failed to download image.')
+                                    await message.channel.send('You have already posted a BeReal.')
                             else:
                                 await message.channel.send('Failed to download image.')
             try:
