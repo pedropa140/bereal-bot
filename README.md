@@ -4,7 +4,7 @@
 
 <div align=center>
 <img src="images/icon.png" alt="icon.png" width="200" height="200">
-<h1>Birthday-Bot</h1>
+<h1>BeReal-Bot</h1>
 
 ## Description
 BeReal-Bot
