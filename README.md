@@ -11,13 +11,13 @@ Welcome to BeReal-Bot! 👋 This bot is designed to capture authentic moments, j
 
 ## How It Works
 
-1. **Random Moment:**  
+  **Random Moment:**  
    You’ll receive a notification at a surprise time.
 
-2. **Snap a Pic:**  
+  **Snap a Pic:**  
    You’ll have 2 minutes to take a photo of what you’re doing right at that moment. It’s all about being real!
 
-3. **Share & Connect:**  
+  **Share & Connect:**  
    After you snap your pic, you can share them with friends and see their moments too. Let’s keep it genuine!
 
 ## Remember
