@@ -100,7 +100,7 @@ In a terminal, find the directory where main.py is located and run this command:
   ```
 
 ### Options:
-  - **/addbirthday [FIRST_NAME] [LAST_NAME]**
+  - **/adduser [FIRST_NAME] [LAST_NAME]**
     - Adds a user to the database.
-  - **/removebirthday**
+  - **/removeuser**
     - Removes a user from the database.
