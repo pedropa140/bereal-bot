@@ -157,7 +157,7 @@ def run_discord_bot():
                                             for channel in guild.channels:
                                                 if str(channel.name) == 'bereal-bot' and isinstance(channel, discord.ForumChannel):
                                                     result_title = f'**{message.author.id} has posted!**'                                                    
-                                                    result_description = f"Posted at {current_time.strftime("%H:%M:%S")}"
+                                                    result_description = f"Posted at {current_time.strftime('%H:%M:%S')}"
                                                     time_to_add = datetime.timedelta(minutes=3)
                                                     time_difference = current_time - (random_datetime + time_to_add)
                                                     if time_difference.total_seconds() > 0:
