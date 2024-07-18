@@ -65,8 +65,8 @@ def run_discord_bot():
             current_datetime = datetime.datetime.combine(datetime_variable, datetime_time)
             datetime_variable = datetime.datetime.now()
             
-            print(current_datetime)
-            print(combined_datetime)
+            # print(current_datetime)
+            # print(combined_datetime)
             if current_datetime == combined_datetime:
                 random_hour = random.randint(11, 19)
                 random_minute = random.randint(0, 59)
