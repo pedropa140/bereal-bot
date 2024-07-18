@@ -47,30 +47,35 @@ def run_discord_bot():
         for user in userdatabase.get_all_user_ids():
             if user not in user_dict:
                 user_dict[user] = False
-
-        random_hour = random.randint(11, 20)
-        random_minute = random.randint(0, 59)
-        random_string = f'{random_hour}:{random_minute}'
-        random_string = f'{random_hour:02d}:{random_minute:02d}'
+        datetime_variable = datetime.datetime.now()
+        random_string = f'10:00'
         current_date = datetime.datetime.now().date()
         random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
         random_datetime = datetime.datetime.combine(current_date, random_time)
+        time_string = '10:00:00'
+        time_object = datetime.datetime.strptime(time_string, '%H:%M:%S').time()
+        combined_datetime = datetime.datetime.combine(datetime_variable.date(), time_object)
         while True:
             for user in userdatabase.get_all_user_ids():
                 if user not in user_dict:
                     user_dict[user] = False
             datetime_variable = datetime.datetime.now()
-            current_datetime = datetime_variable.strftime("%H:%M")
-            if current_datetime == '10:00':
-                random_hour = random.randint(11, 20)
+            datetime_time = datetime_variable.strftime('%H:%M')
+            datetime_time = datetime.datetime.strptime(datetime_time, '%H:%M').time()
+            current_datetime = datetime.datetime.combine(datetime_variable, datetime_time)
+            datetime_variable = datetime.datetime.now()
+            
+            print(current_datetime)
+            print(combined_datetime)
+            if current_datetime == combined_datetime:
+                random_hour = random.randint(11, 19)
                 random_minute = random.randint(0, 59)
-                random_string = f'{random_hour}:{random_minute}'
                 random_string = f'{random_hour:02d}:{random_minute:02d}'
-                current_date = datetime.now().date()
-                random_time = datetime.strptime(random_string, '%H:%M').time()
-                random_datetime = datetime.combine(current_date, random_time)
-
-            if current_datetime == random_string:
+                current_date = datetime.datetime.now().date()
+                random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
+                random_datetime = datetime.datetime.combine(current_date, random_time)
+                print(random_datetime)
+            if current_datetime == random_datetime:
                 for guild in bot.guilds:
                     for channel in guild.channels:
                         if channel.name == 'bereal-bot' and str(channel.type) == 'forum':
