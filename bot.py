@@ -65,8 +65,9 @@ def run_discord_bot():
             current_datetime = datetime.datetime.combine(datetime_variable, datetime_time)
             datetime_variable = datetime.datetime.now()
             
-            print(current_datetime)
-            print(combined_datetime)
+            print(f'CURRENT TIME: \t\t{current_datetime}')
+            print(f'PING RESTART: \t\t{combined_datetime}')
+            print(f'PING TIME: \t\t{random_datetime}')
             if current_datetime == combined_datetime:
                 random_hour = random.randint(11, 19)
                 random_minute = random.randint(0, 59)
@@ -74,7 +75,7 @@ def run_discord_bot():
                 current_date = datetime.datetime.now().date()
                 random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
                 random_datetime = datetime.datetime.combine(current_date, random_time)
-                print(random_datetime)
+                print(f'NEW PING TIME: \t\t{random_datetime}')
             if current_datetime == random_datetime:
                 for guild in bot.guilds:
                     for channel in guild.channels:
