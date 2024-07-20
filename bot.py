@@ -251,7 +251,7 @@ def run_discord_bot():
                 pass                    
     
     @bot.tree.command(name = "adduser", description = "Adds user to the BeReal-Bot")
-    async def adduser(interaction : discord.Interaction, firstname : str, lastname : str):
+    async def adduser(interaction : discord.Interaction):
         username = str(interaction.user)
         mention = str(interaction.user.mention)
         user_message = str(interaction.command.name)
