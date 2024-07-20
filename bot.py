@@ -48,7 +48,7 @@ def run_discord_bot():
             if user not in user_dict:
                 user_dict[user] = False
         datetime_variable = datetime.datetime.now()
-        random_hour = random.randint(datetime.hour() + 1, 19)
+        random_hour = random.randint(datetime_variable.hour() + 1, 19)
         random_minute = random.randint(0, 59)
         random_string = f'{random_hour:02d}:{random_minute:02d}'
         current_date = datetime.datetime.now().date()
