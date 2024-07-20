@@ -2,15 +2,13 @@ import json
 import sqlite3
 
 class User:
-    def __init__(self, username : str, user_id : int, firstname : str, lastname : str):
+    def __init__(self, username : str, user_id : int):
         self.username = username
         self.user_id = user_id
-        self.firstname = firstname
-        self.lastname = lastname
         self.filenames = []
 
-    def get_user_id(self, username, firstname, lastname):
-        if self.username == username and self.firstname == firstname and self.lastname == lastname:
+    def get_user_id(self, username):
+        if self.username == username:
             return self.user_id
         else:
             return None
@@ -21,24 +19,10 @@ class User:
         else:
             return None
 
-    def get_firstname(self, user_id):
-        if self.user_id == user_id:
-            return self.firstname
-        else:
-            return None
-
-    def get_lastname(self, user_id):
-        if self.user_id == user_id:
-            return self.lastname
-        else:
-            return None
-
     def to_json(self):    
         data = {
             'username': self.username,
             'user_id': self.user_id,
-            'firstname': self.firstname,
-            'lastname': self.lastname,
             'filenames': self.filenames
         }
         json_data = json.dumps(data, default=str, indent=4)
@@ -59,18 +43,16 @@ class UserDatabase:
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 username TEXT NOT NULL,
-                user_id INTEGER PRIMARY KEY,
-                firstname TEXT NOT NULL,
-                lastname TEXT NOT NULL
+                user_id INTEGER PRIMARY KEY
             )
         ''')
         self.conn.commit()
 
-    def insert_user(self, username : str, user_id : int, firstname : str, lastname : str):
+    def insert_user(self, username : str, user_id : int):
         self.cursor.execute('''
-            INSERT INTO users (username, user_id, firstname, lastname) 
-            VALUES (?, ?, ?, ?)
-        ''', (username, user_id, firstname, lastname))
+            INSERT INTO users (username, user_id) 
+            VALUES (?, ?)
+        ''', (username, user_id))
         self.conn.commit()
 
     def delete_user(self, user_id : int):

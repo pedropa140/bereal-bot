@@ -7,13 +7,13 @@ import os
 
 from user import User, UserDatabase
 
-async def add_user(interaction : discord.Interaction, firstname : str, lastname : str, userdatabase : UserDatabase):
+async def add_user(interaction : discord.Interaction, userdatabase : UserDatabase):
     if not userdatabase.user_id_exists(interaction.user.id):
-        new_user = User(interaction.user.name, int(interaction.user.id), firstname, lastname)
+        new_user = User(interaction.user.name, int(interaction.user.id))
         new_user.to_json()
-        userdatabase.insert_user(interaction.user.name, int(interaction.user.id), firstname, lastname)
+        userdatabase.insert_user(interaction.user.name, int(interaction.user.id))
         result_title = f'**User Created**'
-        result_description = f'Account for user <@{new_user.get_user_id(interaction.user.name, firstname, lastname)}> has been created.'
+        result_description = f'Account for user <@{new_user.get_user_id(interaction.user.name)}> has been created.'
         embed = discord.Embed(title=result_title, description=result_description, color=8311585)
         file = discord.File('images/icon.png', filename='icon.png')
         embed.set_image(url='attachment://icon.png')

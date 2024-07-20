@@ -48,7 +48,9 @@ def run_discord_bot():
             if user not in user_dict:
                 user_dict[user] = False
         datetime_variable = datetime.datetime.now()
-        random_string = f'10:00'
+        random_hour = random.randint(datetime.hour() + 1, 19)
+        random_minute = random.randint(0, 59)
+        random_string = f'{random_hour:02d}:{random_minute:02d}'
         current_date = datetime.datetime.now().date()
         random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
         random_datetime = datetime.datetime.combine(current_date, random_time)
@@ -63,7 +65,7 @@ def run_discord_bot():
             datetime_time = datetime_variable.strftime('%H:%M')
             datetime_time = datetime.datetime.strptime(datetime_time, '%H:%M').time()
             current_datetime = datetime.datetime.combine(datetime_variable, datetime_time)
-            datetime_variable = datetime.datetime.now()
+            combined_datetime = datetime.datetime.combine(datetime_variable.date(), time_object)
             print('--------------------------------------------------')
             print(f'CURRENT TIME: \t\t{current_datetime}')
             print(f'PING RESTART: \t\t{combined_datetime}')
@@ -245,7 +247,6 @@ def run_discord_bot():
                 pass                    
     
     @bot.tree.command(name = "adduser", description = "Adds user to the BeReal-Bot")
-    @app_commands.describe(firstname = 'First Name', lastname = 'Last Name')
     async def adduser(interaction : discord.Interaction, firstname : str, lastname : str):
         username = str(interaction.user)
         mention = str(interaction.user.mention)
@@ -254,7 +255,7 @@ def run_discord_bot():
         
         print(f'{username} ({mention}) said: "{user_message}" ({channel})')
 
-        await response.add_user(interaction, firstname, lastname, userdatabase)
+        await response.add_user(interaction, userdatabase)
         global user_dict
         for user in userdatabase.get_all_user_ids():
             if user not in user_dict:
