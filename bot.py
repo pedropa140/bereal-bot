@@ -43,94 +43,94 @@ def run_discord_bot():
         except Exception as e:
             print(e)
 
-    async def ping_at_specific_time(bot : commands.Bot, user_dict : dict):
-        global random_datetime
-        datetime_variable = datetime.datetime.now()
-        if int(datetime_variable.hour) + 1 > 20:
-            hour = 10
-        else:
-            hour = int(datetime_variable.hour) + 1
-        random_hour = random.randint(hour, 20)
-        random_minute = random.randint(0, 59)
-        random_string = f'{random_hour:02d}:{random_minute:02d}'
-        current_date = datetime.datetime.now().date()
-        random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
-        random_datetime = datetime.datetime.combine(current_date, random_time)
-        time_string = '10:00:00'
-        time_object = datetime.datetime.strptime(time_string, '%H:%M:%S').time()
-        combined_datetime = datetime.datetime.combine(datetime_variable.date(), time_object)
-        while True:
-            for user in userdatabase.get_all_user_ids():
-                if user not in user_dict:
-                    user_dict[user] = False
-            datetime_variable = datetime.datetime.now()
-            datetime_time = datetime_variable.strftime('%H:%M')
-            datetime_time = datetime.datetime.strptime(datetime_time, '%H:%M').time()
-            current_datetime = datetime.datetime.combine(datetime_variable, datetime_time)
-            combined_datetime = datetime.datetime.combine(datetime_variable.date(), time_object)
-            print('--------------------------------------------------')
-            print(f'CURRENT TIME: \t\t{current_datetime}')
-            print(f'PING RESTART: \t\t{combined_datetime}')
-            print(f'PING TIME: \t\t{random_datetime}')
-            if current_datetime == combined_datetime:
-                random_hour = random.randint(11, 19)
-                random_minute = random.randint(0, 59)
-                random_string = f'{random_hour:02d}:{random_minute:02d}'
-                current_date = datetime.datetime.now().date()
-                random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
-                random_datetime = datetime.datetime.combine(current_date, random_time)
-                print(f'NEW PING TIME: \t\t{random_datetime}')
+    # async def ping_at_specific_time(bot : commands.Bot, user_dict : dict):
+    #     global random_datetime
+    #     datetime_variable = datetime.datetime.now()
+    #     if int(datetime_variable.hour) + 1 > 20:
+    #         hour = 10
+    #     else:
+    #         hour = int(datetime_variable.hour) + 1
+    #     random_hour = random.randint(hour, 20)
+    #     random_minute = random.randint(0, 59)
+    #     random_string = f'{random_hour:02d}:{random_minute:02d}'
+    #     current_date = datetime.datetime.now().date()
+    #     random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
+    #     random_datetime = datetime.datetime.combine(current_date, random_time)
+    #     time_string = '10:00:00'
+    #     time_object = datetime.datetime.strptime(time_string, '%H:%M:%S').time()
+    #     combined_datetime = datetime.datetime.combine(datetime_variable.date(), time_object)
+    #     while True:
+    #         for user in userdatabase.get_all_user_ids():
+    #             if user not in user_dict:
+    #                 user_dict[user] = False
+    #         datetime_variable = datetime.datetime.now()
+    #         datetime_time = datetime_variable.strftime('%H:%M')
+    #         datetime_time = datetime.datetime.strptime(datetime_time, '%H:%M').time()
+    #         current_datetime = datetime.datetime.combine(datetime_variable, datetime_time)
+    #         combined_datetime = datetime.datetime.combine(datetime_variable.date(), time_object)
+    #         print('--------------------------------------------------')
+    #         print(f'CURRENT TIME: \t\t{current_datetime}')
+    #         print(f'PING RESTART: \t\t{combined_datetime}')
+    #         print(f'PING TIME: \t\t{random_datetime}')
+    #         if current_datetime == combined_datetime:
+    #             random_hour = random.randint(11, 19)
+    #             random_minute = random.randint(0, 59)
+    #             random_string = f'{random_hour:02d}:{random_minute:02d}'
+    #             current_date = datetime.datetime.now().date()
+    #             random_time = datetime.datetime.strptime(random_string, '%H:%M').time()
+    #             random_datetime = datetime.datetime.combine(current_date, random_time)
+    #             print(f'NEW PING TIME: \t\t{random_datetime}')
             
-            print('--------------------------------------------------')
-            # if current_datetime == random_datetime:
-            if current_datetime == current_datetime:
-                for guild in bot.guilds:
-                    print(f'Guild Name: {guild.name}')
-                    for channel in guild.channels:
-                        if channel.name == 'bereal-bot' and str(channel.type) == 'forum':
-                            print(f'Channel Name: {channel.name}')
-                            for thread in channel.threads:
-                                await thread.delete()
-                    print(user_dict)
-                    for user in user_dict:
-                        print(f'User: {user}')
-                        bereal_id = 0
-                        guild = bot.get_guild(int(guild.id))
-                        if guild:
-                            for role in guild.roles:
-                                if role.name == 'bereal-user':
-                                    print(f'ROLE ID: {role.id}')
-                                    bereal_id = role.id
-                                    break
+    #         print('--------------------------------------------------')
+    #         # if current_datetime == random_datetime:
+    #         if current_datetime == current_datetime:
+    #             for guild in bot.guilds:
+    #                 print(f'Guild Name: {guild.name}')
+    #                 for channel in guild.channels:
+    #                     if channel.name == 'bereal-bot' and str(channel.type) == 'forum':
+    #                         print(f'Channel Name: {channel.name}')
+    #                         for thread in channel.threads:
+    #                             await thread.delete()
+    #                 print(user_dict)
+    #                 for user in user_dict:
+    #                     print(f'User: {user}')
+    #                     bereal_id = 0
+    #                     guild = bot.get_guild(int(guild.id))
+    #                     if guild:
+    #                         for role in guild.roles:
+    #                             if role.name == 'bereal-user':
+    #                                 print(f'ROLE ID: {role.id}')
+    #                                 bereal_id = role.id
+    #                                 break
 
-                        role = guild.get_role(int(bereal_id))
-                        if role:
-                            try:
-                                member = guild.get_member(user)
-                                if member is None:
-                                    member = await guild.fetch_member(user)
-                                    print(f'Member : {member}')
-                                if member:
-                                        await member.remove_roles(role)
-                            except:
-                                continue
+    #                     role = guild.get_role(int(bereal_id))
+    #                     if role:
+    #                         try:
+    #                             member = guild.get_member(user)
+    #                             if member is None:
+    #                                 member = await guild.fetch_member(user)
+    #                                 print(f'Member : {member}')
+    #                             if member:
+    #                                     await member.remove_roles(role)
+    #                         except:
+    #                             continue
 
-                for user in user_dict:
-                    user_dict[user] = False
-                result_title = f'**BeReal Time!**'
-                result_description = f"You have ***3*** Minutes to post your BeReal!"
-                embed = discord.Embed(title=result_title, description=result_description, color=8311585)
-                embed.set_image(url=f'attachment://icon.png')
-                embed.set_author(name="bereal-Bot says:")
-                embed.set_footer(text="/bereal")
+    #             for user in user_dict:
+    #                 user_dict[user] = False
+    #             result_title = f'**BeReal Time!**'
+    #             result_description = f"You have ***3*** Minutes to post your BeReal!"
+    #             embed = discord.Embed(title=result_title, description=result_description, color=8311585)
+    #             embed.set_image(url=f'attachment://icon.png')
+    #             embed.set_author(name="bereal-Bot says:")
+    #             embed.set_footer(text="/bereal")
 
-                for user in user_dict:
-                    send_message = await bot.fetch_user(user)
-                    with open('images/icon.png', 'rb') as f:
-                        file = discord.File(f, filename='icon.png')
-                        await send_message.send(file=file, embed=embed)
+    #             for user in user_dict:
+    #                 send_message = await bot.fetch_user(user)
+    #                 with open('images/icon.png', 'rb') as f:
+    #                     file = discord.File(f, filename='icon.png')
+    #                     await send_message.send(file=file, embed=embed)
 
-            await asyncio.sleep(60)
+    #         await asyncio.sleep(60)
 
     @bot.event
     async def on_message(message : discord.message.Message):
@@ -245,6 +245,7 @@ def run_discord_bot():
                                                     try:
                                                         if guild.me.guild_permissions.manage_roles:
                                                             if guild.me.top_role.position > role.position:
+                                                                print(role)
                                                                 await member.add_roles(role)
                                                                 print(f"Role {role.name} added to {member.name}")
                                                             else:
