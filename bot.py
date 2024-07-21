@@ -52,7 +52,7 @@ def run_discord_bot():
             hour = 10
         else:
             hour = int(datetime_variable.hour) + 1
-        random_hour = random.randint(hour, 20)
+        random_hour = random.randint(hour, 21)
         random_minute = random.randint(0, 59)
         random_string = f'{random_hour:02d}:{random_minute:02d}'
         current_date = datetime.datetime.now().date()
