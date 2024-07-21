@@ -132,8 +132,7 @@ def run_discord_bot():
             await asyncio.sleep(60)
 
     @bot.event
-    async def on_message(message : discord.message.Message):
-        global user_dict
+    async def on_message(message : discord.message.Message, user_dict : dict):
         global random_datetime
         if isinstance(message.channel, discord.DMChannel) and message.attachments:
             filename = ""
