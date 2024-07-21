@@ -48,7 +48,7 @@ def run_discord_bot():
             if user not in user_dict:
                 user_dict[user] = False
         datetime_variable = datetime.datetime.now()
-        if int(datetime_variable.hour) + 1 > 20:
+        if int(datetime_variable.hour) + 1 > 21:
             hour = 10
         else:
             hour = int(datetime_variable.hour) + 1
