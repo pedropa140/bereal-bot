@@ -32,7 +32,7 @@ Feel free to modify any sections as needed!
 
 </div>
 
-Not interested in downloading bot to your computer, you can add bot to your server [here](https://discord.com/oauth2/authorize?client_id=1257414324025032826&permissions=1147883697994816&integration_type=0&scope=bot)
+Not interested in downloading bot to your computer, you can add bot to your server [here](https://discord.com/oauth2/authorize?client_id=1261134025955868775&permissions=1710833919851760&integration_type=0&scope=bot)
 
 Follow these steps to run the Discord application and add it to your server.
 1. If you are *not* an author, fork the repository [here](https://github.com/pedropa140/bereal-bot/fork).
