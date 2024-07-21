@@ -99,6 +99,7 @@ def run_discord_bot():
                         if guild:
                             for role in guild.roles:
                                 if role.name == 'bereal-user':
+                                    print(f'ROLE ID: {role.id}')
                                     bereal_id = role.id
                                     break
 
