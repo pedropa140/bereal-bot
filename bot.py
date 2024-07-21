@@ -95,10 +95,13 @@ def run_discord_bot():
                         bereal_id = 0
                         guild = bot.get_guild(int(guild.id))
                         if guild:
-                            for role in guild.roles:
-                                if role.name == 'bereal-user':
-                                    bereal_id = role.id
-                                    break
+                            try:
+                                for role in guild.roles:
+                                    if role.name == 'bereal-user':
+                                        bereal_id = role.id
+                                        break
+                            except:
+                                continue
 
                         role = guild.get_role(int(bereal_id))
                         if role:
