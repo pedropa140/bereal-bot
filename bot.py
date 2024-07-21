@@ -15,6 +15,7 @@ import datetime
 import time
 load_dotenv()
 
+user_dict = {}
 def run_discord_bot():
     TOKEN = os.getenv('DISCORD_TOKEN')
     if not os.path.exists('images/user_images'):
@@ -26,7 +27,6 @@ def run_discord_bot():
     intents.dm_messages = True
     bot = commands.Bot(command_prefix="!", intents=intents)
     userdatabase = UserDatabase('users_database.db')
-    user_dict = {}
     for user in userdatabase.get_all_user_ids():
             if user not in user_dict:
                 user_dict[user] = False
@@ -132,8 +132,9 @@ def run_discord_bot():
             await asyncio.sleep(60)
 
     @bot.event
-    async def on_message(message : discord.message.Message, user_dict : dict):
+    async def on_message(message : discord.message.Message):
         global random_datetime
+        global user_dict
         if isinstance(message.channel, discord.DMChannel) and message.attachments:
             filename = ""
             for attachment in message.attachments:
