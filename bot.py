@@ -177,7 +177,7 @@ def run_discord_bot():
                                         for guild in bot.guilds:
                                             for channel in guild.channels:
                                                 if str(channel.name) == 'bereal-bot' and isinstance(channel, discord.ForumChannel):
-                                                    result_title = f'**{message.author.id} has posted!**'                                                    
+                                                    result_title = f'**{message.author.name} has posted!**'                                                    
                                                     result_description = f"Posted at {current_time.strftime('%H:%M:%S')}"
                                                     time_to_add = datetime.timedelta(minutes=3)
                                                     time_difference = current_time - (random_datetime + time_to_add)
@@ -228,36 +228,6 @@ def run_discord_bot():
                                                 if member:
                                                     await member.add_roles(role)
 
-                                        # for guild in bot.guilds:
-                                        #     print(f'BOT SERVER: {guild.name}')
-                                        #     bereal_id = 0
-                                        #     guild = bot.get_guild(int(guild.id))
-                                        #     if guild:
-                                        #         for role in guild.roles:
-                                        #             if role.name == 'bereal-user':
-                                        #                 bereal_id = role.id
-                                        #                 break
-
-                                        #     role = guild.get_role(int(bereal_id))
-                                        #     if role:
-                                        #         member = guild.get_member(message.author.id)
-                                        #         if member is None:
-                                        #             member = await guild.fetch_member(message.author.id)
-                                        #         if member:
-                                        #             try:
-                                        #                 if guild.me.guild_permissions.manage_roles:
-                                        #                     if guild.me.top_role.position > role.position:
-                                        #                         print(role)
-                                        #                         await member.add_roles(role)
-                                        #                         print(f"Role {role.name} added to {member.name}")
-                                        #                     else:
-                                        #                         print(f"Cannot add role to {member.name}: Bot's role hierarchy issue.")
-                                        #                 else:
-                                        #                     print("Bot does not have Manage Roles permission.")
-                                        #             except discord.Forbidden:
-                                        #                 print(f"Failed to add role {role.name} to {member.name}: Missing Permissions.")
-                                        #             except discord.HTTPException as e:
-                                        #                 print(f"Failed to add role {role.name} to {member.name}: {e}")
                                     else:
                                         result_title = f'**ERROR**'
                                         result_description = 'Incorrect file format.'
