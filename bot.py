@@ -180,7 +180,8 @@ def run_discord_bot():
                                                     result_title = f'**{message.author.id} has posted!**'                                                    
                                                     result_description = f"Posted at {current_time.strftime('%H:%M:%S')}"
                                                     time_to_add = datetime.timedelta(minutes=3)
-                                                    time_difference = current_time - (random_datetime + time_to_add)
+                                                    # time_difference = current_time - (random_datetime + time_to_add)
+                                                    time_difference = current_time
                                                     if time_difference.total_seconds() > 0:
                                                         if time_difference.total_seconds() >= 3600:
                                                             hours = int(time_difference.total_seconds() / 3600)
