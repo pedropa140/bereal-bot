@@ -251,7 +251,7 @@ def run_discord_bot():
                                                                 await member.add_roles(role)
                                                                 print(f"Role {role.name} added to {member.name}")
                                                             else:
-                                                                print(f"Cannot add role {role.name}: Bot's role hierarchy issue.")
+                                                                print(f"Cannot add role to {member.name}: Bot's role hierarchy issue.")
                                                         else:
                                                             print("Bot does not have Manage Roles permission.")
                                                     except discord.Forbidden:
