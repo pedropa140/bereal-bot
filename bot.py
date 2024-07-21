@@ -209,6 +209,23 @@ def run_discord_bot():
                                                     )
                                                     break
                                         user_dict[message.author.id] = True
+                                        # for guild in bot.guilds:
+                                        #     bereal_id = 0
+                                        #     guild = bot.get_guild(int(guild.id))
+                                        #     if guild:
+                                        #         for role in guild.roles:
+                                        #             if role.name == 'bereal-user':
+                                        #                 bereal_id = role.id
+                                        #                 break
+
+                                        #     role = guild.get_role(int(bereal_id))
+                                        #     if role:
+                                        #         member = guild.get_member(message.author.id)
+                                        #         if member is None:
+                                        #             member = await guild.fetch_member(message.author.id)
+                                        #         if member:
+                                        #             await member.add_roles(role)
+
                                         for guild in bot.guilds:
                                             bereal_id = 0
                                             guild = bot.get_guild(int(guild.id))
@@ -224,7 +241,19 @@ def run_discord_bot():
                                                 if member is None:
                                                     member = await guild.fetch_member(message.author.id)
                                                 if member:
-                                                    await member.add_roles(role)
+                                                    try:
+                                                        if guild.me.guild_permissions.manage_roles:
+                                                            if guild.me.top_role.position > role.position:
+                                                                await member.add_roles(role)
+                                                                print(f"Role {role.name} added to {member.name}")
+                                                            else:
+                                                                print(f"Cannot add role {role.name}: Bot's role hierarchy issue.")
+                                                        else:
+                                                            print("Bot does not have Manage Roles permission.")
+                                                    except discord.Forbidden:
+                                                        print(f"Failed to add role {role.name} to {member.name}: Missing Permissions.")
+                                                    except discord.HTTPException as e:
+                                                        print(f"Failed to add role {role.name} to {member.name}: {e}")
                                     else:
                                         result_title = f'**ERROR**'
                                         result_description = 'Incorrect file format.'
