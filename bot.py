@@ -39,7 +39,7 @@ def run_discord_bot():
             print(f'Synced {synced} command(s)')
             print(f'Synced {len(synced)} command(s)')            
             print(f'{bot.user} is now running!')
-            bot.loop.create_task(ping_at_specific_time(bot, user_dict))
+            # bot.loop.create_task(ping_at_specific_time(bot, user_dict))
         except Exception as e:
             print(e)
 
@@ -227,6 +227,7 @@ def run_discord_bot():
                                         #             await member.add_roles(role)
 
                                         for guild in bot.guilds:
+                                            print(f'BOT SERVER: {guild.name}')
                                             bereal_id = 0
                                             guild = bot.get_guild(int(guild.id))
                                             if guild:
