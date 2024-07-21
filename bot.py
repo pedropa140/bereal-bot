@@ -182,21 +182,22 @@ def run_discord_bot():
                                                     time_to_add = datetime.timedelta(minutes=3)
                                                     # time_difference = current_time - (random_datetime + time_to_add)
                                                     time_difference = current_time
-                                                    if time_difference.total_seconds() > 0:
-                                                        if time_difference.total_seconds() >= 3600:
-                                                            hours = int(time_difference.total_seconds() / 3600)
-                                                            hour_label = "hour" if hours == 1 else "hours"
-                                                            result_description += f' ({hours} {hour_label} late)'
-                                                        elif time_difference.total_seconds() >= 60:
-                                                            minutes = int(time_difference.total_seconds() / 60)
-                                                            minute_label = "minute" if minutes == 1 else "minutes"
-                                                            result_description += f' ({minutes} {minute_label} late)'
-                                                        else:
-                                                            seconds = int(time_difference.total_seconds())
-                                                            second_label = "second" if seconds == 1 else "seconds"
-                                                            result_description += f' ({seconds} {second_label} late)'
+                                                    # if time_difference.total_seconds() > 0:
+                                                    #     if time_difference.total_seconds() >= 3600:
+                                                    #         hours = int(time_difference.total_seconds() / 3600)
+                                                    #         hour_label = "hour" if hours == 1 else "hours"
+                                                    #         result_description += f' ({hours} {hour_label} late)'
+                                                    #     elif time_difference.total_seconds() >= 60:
+                                                    #         minutes = int(time_difference.total_seconds() / 60)
+                                                    #         minute_label = "minute" if minutes == 1 else "minutes"
+                                                    #         result_description += f' ({minutes} {minute_label} late)'
+                                                    #     else:
+                                                    #         seconds = int(time_difference.total_seconds())
+                                                    #         second_label = "second" if seconds == 1 else "seconds"
+                                                    #         result_description += f' ({seconds} {second_label} late)'
 
-                                                    embed = discord.Embed(title=result_title, description=result_description, color=8311585)
+                                                    # embed = discord.Embed(title=result_title, description=result_description, color=8311585)
+                                                    embed = discord.Embed(title=result_title, color=8311585)
                                                     file = discord.File(f'images/user_images/{message.author.id}_{formatted_time}.jpg', filename=f'{message.author.id}_{formatted_time}.jpg')
                                                     embed.set_image(url=f'attachment://{message.author.id}_{formatted_time}.jpg')
                                                     embed.set_author(name="bereal-Bot says:")
