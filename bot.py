@@ -27,6 +27,9 @@ def run_discord_bot():
     bot = commands.Bot(command_prefix="!", intents=intents)
     userdatabase = UserDatabase('users_database.db')
     user_dict = {}
+    for user in userdatabase.get_all_user_ids():
+            if user not in user_dict:
+                user_dict[user] = False
     random_datetime = None
 
     @bot.event
@@ -36,23 +39,18 @@ def run_discord_bot():
             print(f'Synced {synced} command(s)')
             print(f'Synced {len(synced)} command(s)')            
             print(f'{bot.user} is now running!')
-            bot.loop.create_task(ping_at_specific_time(bot))
+            bot.loop.create_task(ping_at_specific_time(bot, user_dict))
         except Exception as e:
             print(e)
 
-    async def ping_at_specific_time(bot : commands.Bot):
-        global user_dict        
+    async def ping_at_specific_time(bot : commands.Bot, user_dict : dict):
         global random_datetime
-        user_dict = {}
-        for user in userdatabase.get_all_user_ids():
-            if user not in user_dict:
-                user_dict[user] = False
         datetime_variable = datetime.datetime.now()
-        if int(datetime_variable.hour) + 1 > 22:
+        if int(datetime_variable.hour) + 1 > 20:
             hour = 10
         else:
             hour = int(datetime_variable.hour) + 1
-        random_hour = random.randint(hour, 22)
+        random_hour = random.randint(hour, 20)
         random_minute = random.randint(0, 59)
         random_string = f'{random_hour:02d}:{random_minute:02d}'
         current_date = datetime.datetime.now().date()
@@ -84,14 +82,18 @@ def run_discord_bot():
                 print(f'NEW PING TIME: \t\t{random_datetime}')
             
             print('--------------------------------------------------')
+            # if current_datetime == random_datetime:
             if current_datetime == current_datetime:
                 for guild in bot.guilds:
+                    print(f'Guild Name: {guild.name}')
                     for channel in guild.channels:
                         if channel.name == 'bereal-bot' and str(channel.type) == 'forum':
+                            print(f'Channel Name: {channel.name}')
                             for thread in channel.threads:
                                 await thread.delete()
-
+                    print(user_dict)
                     for user in user_dict:
+                        print(f'User: {user}')
                         bereal_id = 0
                         guild = bot.get_guild(int(guild.id))
                         if guild:
@@ -102,14 +104,12 @@ def run_discord_bot():
 
                         role = guild.get_role(int(bereal_id))
                         if role:
-                            try:
-                                member = guild.get_member(user)
-                                if member is None:
-                                    member = await guild.fetch_member(user)
-                                if member:
-                                    await member.remove_roles(role)
-                            except:
-                                continue
+                            member = guild.get_member(user)
+                            print(f'Member : {member}')
+                            if member is None:
+                                member = await guild.fetch_member(user)
+                            if member:
+                                await member.remove_roles(role)
 
                 for user in user_dict:
                     user_dict[user] = False
