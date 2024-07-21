@@ -104,12 +104,15 @@ def run_discord_bot():
 
                         role = guild.get_role(int(bereal_id))
                         if role:
-                            member = guild.get_member(user)
-                            print(f'Member : {member}')
-                            if member is None:
-                                member = await guild.fetch_member(user)
-                            if member:
-                                await member.remove_roles(role)
+                            try:
+                                member = guild.get_member(user)
+                                print(f'Member : {member}')
+                                if member is None:
+                                    member = await guild.fetch_member(user)
+                                if member:
+                                    await member.remove_roles(role)
+                            except:
+                                continue
 
                 for user in user_dict:
                     user_dict[user] = False
