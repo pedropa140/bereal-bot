@@ -84,7 +84,7 @@ def run_discord_bot():
                 print(f'NEW PING TIME: \t\t{random_datetime}')
             
             print('--------------------------------------------------')
-            if current_datetime == random_datetime:
+            if current_datetime == current_datetime:
                 for guild in bot.guilds:
                     for channel in guild.channels:
                         if channel.name == 'bereal-bot' and str(channel.type) == 'forum':
