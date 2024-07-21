@@ -48,11 +48,11 @@ def run_discord_bot():
             if user not in user_dict:
                 user_dict[user] = False
         datetime_variable = datetime.datetime.now()
-        if int(datetime_variable.hour) + 1 > 21:
+        if int(datetime_variable.hour) + 1 > 23:
             hour = 10
         else:
             hour = int(datetime_variable.hour) + 1
-        random_hour = random.randint(hour, 21)
+        random_hour = random.randint(hour, 23)
         random_minute = random.randint(0, 59)
         random_string = f'{random_hour:02d}:{random_minute:02d}'
         current_date = datetime.datetime.now().date()
@@ -95,13 +95,10 @@ def run_discord_bot():
                         bereal_id = 0
                         guild = bot.get_guild(int(guild.id))
                         if guild:
-                            try:
-                                for role in guild.roles:
-                                    if role.name == 'bereal-user':
-                                        bereal_id = role.id
-                                        break
-                            except:
-                                continue
+                            for role in guild.roles:
+                                if role.name == 'bereal-user':
+                                    bereal_id = role.id
+                                    break
 
                         role = guild.get_role(int(bereal_id))
                         if role:
@@ -109,7 +106,10 @@ def run_discord_bot():
                             if member is None:
                                 member = await guild.fetch_member(user)
                             if member:
-                                await member.remove_roles(role)
+                                try:
+                                    await member.remove_roles(role)
+                                except:
+                                    continue
 
                 for user in user_dict:
                     user_dict[user] = False
