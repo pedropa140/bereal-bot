@@ -22,7 +22,6 @@ Welcome to BeReal-Bot! 👋 This bot is designed to capture authentic moments, j
 
 ## Remember
 It’s not about the likes; it’s about capturing life as it is. So get ready to embrace the spontaneity! 🎉
-Feel free to modify any sections as needed!
 </div>
 
 
